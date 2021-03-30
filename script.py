@@ -66,6 +66,11 @@ def export_data_from_lab_to_xlsx(pandas_excel_writer: pandas.ExcelWriter, dictio
         columns = [pandas_data_frame.columns.tolist()[lambda_index]] + pandas_data_frame.columns.tolist()[:lambda_index] + pandas_data_frame.columns.tolist()[lambda_index+1:]
 
         pandas_data_frame = pandas_data_frame.reindex(columns, axis=1)
+
+        # Filtering lambda < 400 and lambda > 700
+        pandas_data_frame = pandas_data_frame[400 <= pandas_data_frame['λ']]
+        pandas_data_frame = pandas_data_frame[700 >= pandas_data_frame['λ']]
+
         pandas_data_frame.to_excel(excel_writer=pandas_excel_writer, sheet_name=name, index=False)
 
     pandas_excel_writer.save()
