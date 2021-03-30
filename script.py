@@ -52,9 +52,11 @@ def filter_vectors(filename: str, naming_pattern=r"^\[[0-9]*\]-.*-[0-9]*_E$") ->
     return dictionary
 
 
-def export_data_from_lab_to_xlsx(pandas_excel_writer: pandas.ExcelWriter, dictionaries_of_values: list[dict]) -> None:
+def export_data_from_lab_to_xlsx(pandas_excel_writer: pandas.ExcelWriter, dictionaries_of_values: list[dict], sheet_names: list[str]) -> None:
+    k = 0
     for dictionary in dictionaries_of_values:
-        name = list(dictionary.keys())[0][1:3]
+        name = sheet_names[k]
+        k += 1
 
         # Write lambda first
         pandas_data_frame = pandas.DataFrame(dictionary)
@@ -78,8 +80,12 @@ if __name__ == "__main__":
     writer = pandas.ExcelWriter('output.xlsx', engine='xlsxwriter')
 
     all_data = []
+    filenames = []
 
-    for i in files:
+    naming_pattern = re.compile(r'([0-9]+)\.lab$')
+
+    for i in sorted(files, key=lambda x: naming_pattern.search(x).group().replace('.lab', '')):
         all_data.append(filter_vectors(i))
+        filenames.append(naming_pattern.search(i).group().replace('.lab', ''))
 
-    export_data_from_lab_to_xlsx(writer, all_data)
+    export_data_from_lab_to_xlsx(writer, all_data, filenames)
