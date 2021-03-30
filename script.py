@@ -52,10 +52,19 @@ def filter_vectors(filename: str, naming_pattern=r"^\[[0-9]*\]-.*-[0-9]*_E$") ->
     return dictionary
 
 
-def export_data_from_lab_to_xlsx(pandas_excel_writer: pandas.ExcelWriter, dictionaries_of_values: list[dict], filename='output.xlsx') -> None:
+def export_data_from_lab_to_xlsx(pandas_excel_writer: pandas.ExcelWriter, dictionaries_of_values: list[dict]) -> None:
     for dictionary in dictionaries_of_values:
         name = list(dictionary.keys())[0][1:3]
-        pandas.DataFrame(dictionary).to_excel(excel_writer=pandas_excel_writer, sheet_name=name, index=False)
+
+        # Write lambda first
+        pandas_data_frame = pandas.DataFrame(dictionary)
+
+        # Reorder columns
+        lambda_index = pandas_data_frame.columns.tolist().index('λ')
+        columns = [pandas_data_frame.columns.tolist()[lambda_index]] + pandas_data_frame.columns.tolist()[:lambda_index] + pandas_data_frame.columns.tolist()[lambda_index+1:]
+
+        pandas_data_frame = pandas_data_frame.reindex(columns, axis=1)
+        pandas_data_frame.to_excel(excel_writer=pandas_excel_writer, sheet_name=name, index=False)
 
     pandas_excel_writer.save()
 
