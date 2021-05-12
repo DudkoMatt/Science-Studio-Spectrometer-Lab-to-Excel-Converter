@@ -5,7 +5,7 @@ from os.path import isfile, join
 
 
 # Getting vectors from file
-def filter_vectors(filename: str, naming_pattern=r"^\[[0-9]*\]-.*-[0-9]*_E$") -> dict:
+def filter_vectors(filename: str, naming_pattern=r".*") -> dict:
     """
     Filtering data from *.lab
     :param filename: name of the file
