@@ -5,7 +5,7 @@ This is a simple script for converting .lab files from spectrometer to .xslx Exc
 
 ## Installing dependencies
 
-All dependencies are listed in [requirements.txt](requirements.txt). Install them with the following command:
+This script was tested on Python 3.9.4. All dependencies are listed in [requirements.txt](requirements.txt). Install them with the following command:
 
 ```shell
 pip install -r requirements.txt
